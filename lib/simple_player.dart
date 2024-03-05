@@ -1,11 +1,10 @@
-part of svgaplayer_flutter_player;
+part of 'player.dart';
 
 class SVGASimpleImage extends StatefulWidget {
   final String? resUrl;
   final String? assetsName;
 
-  const SVGASimpleImage({Key? key, this.resUrl, this.assetsName})
-      : super(key: key);
+  const SVGASimpleImage({Key? key, this.resUrl, this.assetsName}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -13,8 +12,7 @@ class SVGASimpleImage extends StatefulWidget {
   }
 }
 
-class _SVGASimpleImageState extends State<SVGASimpleImage>
-    with SingleTickerProviderStateMixin {
+class _SVGASimpleImageState extends State<SVGASimpleImage> with SingleTickerProviderStateMixin {
   SVGAAnimationController? animationController;
 
   @override
@@ -71,8 +69,7 @@ class _SVGASimpleImageState extends State<SVGASimpleImage>
         library: 'svga library',
         informationCollector: () => [
           if (widget.resUrl != null) StringProperty('resUrl', widget.resUrl),
-          if (widget.assetsName != null)
-            StringProperty('assetsName', widget.assetsName),
+          if (widget.assetsName != null) StringProperty('assetsName', widget.assetsName),
         ],
       ));
     });

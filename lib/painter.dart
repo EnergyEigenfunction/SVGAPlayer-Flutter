@@ -1,4 +1,4 @@
-part of svgaplayer_flutter_player;
+part of 'player.dart';
 
 class _SVGAPainter extends CustomPainter {
   final BoxFit fit;
@@ -14,8 +14,7 @@ class _SVGAPainter extends CustomPainter {
     this.fit = BoxFit.contain,
     this.filterQuality = FilterQuality.low,
     this.clipRect = true,
-  })  : assert(
-            controller.videoItem != null, 'Invalid SVGAAnimationController!'),
+  })  : assert(controller.videoItem != null, 'Invalid SVGAAnimationController!'),
         super(repaint: controller);
 
   @override
@@ -46,8 +45,7 @@ class _SVGAPainter extends CustomPainter {
     // scale viewbox size (source) to canvas size (destination)
     var sx = fittedSizes.destination.width / fittedSizes.source.width;
     var sy = fittedSizes.destination.height / fittedSizes.source.height;
-    final Size scaledHalfViewBoxSize =
-        Size(viewBoxRect.size.width * sx, viewBoxRect.size.height * sy) / 2.0;
+    final Size scaledHalfViewBoxSize = Size(viewBoxRect.size.width * sx, viewBoxRect.size.height * sy) / 2.0;
     final Size halfCanvasSize = canvasRect.size / 2.0;
     // center align
     final Offset shift = Offset(
@@ -62,8 +60,7 @@ class _SVGAPainter extends CustomPainter {
     for (final sprite in videoItem.sprites) {
       final imageKey = sprite.imageKey;
       // var matteKey = sprite.matteKey;
-      if (imageKey.isEmpty ||
-          videoItem.dynamicItem.dynamicHidden[imageKey] == true) {
+      if (imageKey.isEmpty || videoItem.dynamicItem.dynamicHidden[imageKey] == true) {
         continue;
       }
       final frameItem = sprite.frames[currentFrame];
@@ -94,10 +91,8 @@ class _SVGAPainter extends CustomPainter {
         canvas.save();
         canvas.clipPath(buildDPath(frameItem.clipPath));
       }
-      final frameRect =
-          Rect.fromLTRB(0, 0, frameItem.layout.width, frameItem.layout.height);
-      final frameAlpha =
-          frameItem.hasAlpha() ? (frameItem.alpha * 255).toInt() : 255;
+      final frameRect = Rect.fromLTRB(0, 0, frameItem.layout.width, frameItem.layout.height);
+      final frameAlpha = frameItem.hasAlpha() ? (frameItem.alpha * 255).toInt() : 255;
       drawBitmap(canvas, imageKey, frameRect, frameAlpha);
       drawShape(canvas, frameItem.shapes, frameAlpha);
       // draw dynamic
@@ -115,8 +110,7 @@ class _SVGAPainter extends CustomPainter {
   }
 
   void drawBitmap(Canvas canvas, String imageKey, Rect frameRect, int alpha) {
-    final bitmap = videoItem.dynamicItem.dynamicImages[imageKey] ??
-        videoItem.bitmapCache[imageKey];
+    final bitmap = videoItem.dynamicItem.dynamicImages[imageKey] ?? videoItem.bitmapCache[imageKey];
     if (bitmap == null) return;
 
     final bitmapPaint = Paint();
@@ -125,8 +119,7 @@ class _SVGAPainter extends CustomPainter {
     bitmapPaint.isAntiAlias = true;
     bitmapPaint.color = Color.fromARGB(alpha, 0, 0, 0);
 
-    Rect srcRect =
-        Rect.fromLTRB(0, 0, bitmap.width.toDouble(), bitmap.height.toDouble());
+    Rect srcRect = Rect.fromLTRB(0, 0, bitmap.width.toDouble(), bitmap.height.toDouble());
     Rect dstRect = frameRect;
     canvas.drawImageRect(bitmap, srcRect, dstRect, bitmapPaint);
     drawTextOnBitmap(canvas, imageKey, frameRect, alpha);
@@ -211,11 +204,7 @@ class _SVGAPainter extends CustomPainter {
           default:
         }
         paint.strokeMiterLimit = shape.styles.miterLimit;
-        List<double> lineDash = [
-          shape.styles.lineDashI,
-          shape.styles.lineDashII,
-          shape.styles.lineDashIII
-        ];
+        List<double> lineDash = [shape.styles.lineDashI, shape.styles.lineDashII, shape.styles.lineDashIII];
         if (lineDash[0] > 0 || lineDash[1] > 0) {
           canvas.drawPath(
               dashPath(
@@ -260,8 +249,7 @@ class _SVGAPainter extends CustomPainter {
       final wv = args.width;
       final hv = args.height;
       final crv = args.cornerRadius;
-      final rrect = RRect.fromRectAndRadius(
-          Rect.fromLTWH(xv, yv, wv, hv), Radius.circular(crv));
+      final rrect = RRect.fromRectAndRadius(Rect.fromLTWH(xv, yv, wv, hv), Radius.circular(crv));
       if (!rrect.isEmpty) path.addRRect(rrect);
     }
     return path;
@@ -347,10 +335,7 @@ class _SVGAPainter extends CustomPainter {
             currentPointY,
           );
         } else if (firstLetter == "S") {
-          if (currentPointX1 != null &&
-              currentPointY1 != null &&
-              currentPointX2 != null &&
-              currentPointY2 != null) {
+          if (currentPointX1 != null && currentPointY1 != null && currentPointX2 != null && currentPointY2 != null) {
             currentPointX1 = currentPointX - currentPointX2! + currentPointX;
             currentPointY1 = currentPointY - currentPointY2! + currentPointY;
             currentPointX2 = double.parse(args[0]);
@@ -370,14 +355,10 @@ class _SVGAPainter extends CustomPainter {
             currentPointY1 = double.parse(args[1]);
             currentPointX = double.parse(args[2]);
             currentPointY = double.parse(args[3]);
-            path!.quadraticBezierTo(
-                currentPointX1!, currentPointY1!, currentPointX, currentPointY);
+            path!.quadraticBezierTo(currentPointX1!, currentPointY1!, currentPointX, currentPointY);
           }
         } else if (firstLetter == "s") {
-          if (currentPointX1 != null &&
-              currentPointY1 != null &&
-              currentPointX2 != null &&
-              currentPointY2 != null) {
+          if (currentPointX1 != null && currentPointY1 != null && currentPointX2 != null && currentPointY2 != null) {
             currentPointX1 = currentPointX - currentPointX2! + currentPointX;
             currentPointY1 = currentPointY - currentPointY2! + currentPointY;
             currentPointX2 = currentPointX + double.parse(args[0]);
@@ -409,8 +390,7 @@ class _SVGAPainter extends CustomPainter {
           currentPointY1 = double.parse(args[1]);
           currentPointX = double.parse(args[2]);
           currentPointY = double.parse(args[3]);
-          path!.quadraticBezierTo(
-              currentPointX1!, currentPointY1!, currentPointX, currentPointY);
+          path!.quadraticBezierTo(currentPointX1!, currentPointY1!, currentPointX, currentPointY);
         } else if (firstLetter == "q") {
           currentPointX1 = currentPointX + double.parse(args[0]);
           currentPointY1 = currentPointY + double.parse(args[1]);
@@ -431,8 +411,7 @@ class _SVGAPainter extends CustomPainter {
     return path;
   }
 
-  void drawTextOnBitmap(
-      Canvas canvas, String imageKey, Rect frameRect, int frameAlpha) {
+  void drawTextOnBitmap(Canvas canvas, String imageKey, Rect frameRect, int frameAlpha) {
     var dynamicText = videoItem.dynamicItem.dynamicText;
     if (dynamicText.isEmpty) return;
     if (dynamicText[imageKey] == null) return;
